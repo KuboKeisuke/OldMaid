@@ -12,49 +12,73 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class NameInputPanel extends JPanel {
-	// 入力用コンポーネント
-	JTextField text;
+/*
+ * 設定画面のプレイヤー名入力パネル
+ * */
+public class NameInputPanel extends JPanel implements ActionListener {
+	// レイアウト
+	private BoxLayout boxLayout;
+
+	// タイトル表示用コンポーネント
+	private JLabel titleLabel;
+	// プレイヤー名入力用コンポーネント
+	private JTextField playerNameLabel;
+	// プレイヤー名自動入力用ボタンコンポーネント
+	private JButton setNameButton;
+
+	// 文言
+	private static final String PLAYER1 = "プレイヤー1";
+	private static final String TITLELABEL = "名前";
+	private static final String SETNAMEBUTTON = "「プレイヤー1」に設定";
 
 	/*
 	 * コンストラクタ
 	 */
 	public NameInputPanel() {
-		// 上から下に順にラベルを配置
-		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		// レイアウト設定 上から下に順にラベルを配置
+		boxLayout = new BoxLayout(this, boxLayout.PAGE_AXIS);
+		this.setLayout(boxLayout);
 
 		// タイトル作成
-		JLabel titleLabel = new JLabel("名前");
+		titleLabel = new JLabel(TITLELABEL);
 		titleLabel.setFont(new Font("ＭＳ ゴシック", Font.BOLD, 40));
 		titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		this.add(titleLabel);
 
-		// 人数入力
-		text = new JTextField("プレイヤー1");
+		// プレイヤー名入力
+		playerNameLabel = new JTextField(PLAYER1);
 		JPanel textPanel = new JPanel();
-		text.setPreferredSize(new Dimension(200, 40));
-		text.setAlignmentX(Component.CENTER_ALIGNMENT);
-		textPanel.add(text);
+		playerNameLabel.setPreferredSize(new Dimension(200, 40));
+		playerNameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		textPanel.add(playerNameLabel);
 		this.add(textPanel);
 
 		// プレイヤー名自動設定
-		JButton setNameButton = new JButton("「プレイヤー1」に設定");
+		setNameButton = new JButton(SETNAMEBUTTON);
 		setNameButton.setPreferredSize(new Dimension(100, 50));
 		setNameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		setNameButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				setNameAuto();
-			}
-		});
+		setNameButton.addActionListener(this);
 		this.add(setNameButton);
 	}
 
+	/*
+	 * プレイヤー名のゲッター
+	 */
 	public String getName() {
-		return text.getText();
+		return playerNameLabel.getText();
 	}
 
-	public void setNameAuto() {
-		text.setText("プレイヤー1");
+	/*
+	 * ボタンを押したとき
+	 */
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		String actionCommand = e.getActionCommand();
+		switch (actionCommand) {
+		// プレイヤー名自動設定ボタン
+		case SETNAMEBUTTON:
+			playerNameLabel.setText(PLAYER1);
+			break;
+		}
 	}
 }

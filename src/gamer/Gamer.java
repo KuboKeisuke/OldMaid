@@ -27,6 +27,7 @@ public class Gamer {
 		hand.shuffle();
 	}
 
+	// 手札のゲッター
 	public Hand getHand() {
 		return hand;
 	}

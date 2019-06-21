@@ -6,15 +6,13 @@ import java.util.Scanner;
 
 import cards.Cards;
 import gamer.Player;
-import panel.PlayPanel;
 
 public class OldMaidPlayer extends Player {
 
+	/*
+	 * コンストラクタ
+	 */
 	public OldMaidPlayer(String name) {
-		super(name);
-	}
-
-	public OldMaidPlayer(String name, PlayPanel playPanel) {
 		super(name);
 	}
 
@@ -52,12 +50,12 @@ public class OldMaidPlayer extends Player {
 	}
 
 	/*
-	 * 相手の手札の枚数からカードを引くindexを選ぶ
+	 * 相手の手札の枚数からカードを引くindexを選ぶ 1から引数の範囲内で選択する
 	 */
 	public int selectCard(int number) {
 		int index = 0;
 		// NPCならランダムにする
-		if (getName().contains("NPC")) {
+		if (getName().contains(OldMaid.NPC)) {
 			Random random = new Random();
 			index = random.nextInt(number);
 		} else {
@@ -88,7 +86,7 @@ public class OldMaidPlayer extends Player {
 	}
 
 	/*
-	 * カードを渡す
+	 * カードを渡す Cardsクラスを返しつつ手札に持っているものは破棄する
 	 */
 	public Cards giveCard(int index) {
 		Cards card = hand.get(index);

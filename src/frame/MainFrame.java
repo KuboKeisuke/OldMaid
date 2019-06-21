@@ -11,17 +11,28 @@ import panel.StartPanel;
  * メインフレーム
  * */
 public class MainFrame extends JFrame {
+	// スタート画面名
 	public static final String STARTPANEL = "STARTPANEL";
+	// 設定画面名
 	public static final String SETTINGPANEL = "SETTINGPANEL";
+	// ゲーム画面名
 	public static final String GAMEPANEL = "GAMEPANEL";
 
+	// スタート画面
 	private StartPanel startPanel;
+	// 設定画面
 	private SettingPanel settingPanel;
+	// ゲーム画面
 	private GamePanel gamePanel;
 
+	/*
+	 * コンストラクタ
+	 */
 	public MainFrame() {
+		// 表示位置とサイズ
 		this.setBounds(150, 80, 1000, 600);
-		this.setResizable(false);
+		// サイズ変更不可
+		this.setResizable(true);
 
 		startPanel = new StartPanel(this, STARTPANEL);
 		settingPanel = new SettingPanel(this, SETTINGPANEL);
@@ -32,6 +43,7 @@ public class MainFrame extends JFrame {
 		this.add(settingPanel);
 		this.add(gamePanel);
 
+		// スタート画面を最初に表示
 		startPanel.setVisible(true);
 		settingPanel.setVisible(false);
 		gamePanel.setVisible(false);
@@ -61,7 +73,9 @@ public class MainFrame extends JFrame {
 		}
 	}
 
-	/* プレイ画面にデータを送りゲームを行う */
+	/*
+	 * プレイ画面にデータを送りゲームを行う
+	 */
 	public void setGame(String name, int number) {
 		gamePanel.setGame(name, number);
 	}

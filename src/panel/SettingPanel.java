@@ -14,30 +14,54 @@ import javax.swing.JPanel;
 import frame.MainFrame;
 
 /*
- * ゲーム直前の設定画面
+ * 設定画面
  * */
-public class SettingPanel extends JPanel {
-
+public class SettingPanel extends JPanel implements ActionListener {
+	// メインフレーム
 	private MainFrame mainFrame;
+	// レイアウト
 	private BorderLayout borderLayout;
-	private NumberInputPanel numberPanel;
-	private NameInputPanel namePanel;
 
+	// タイトル表示用コンポーネント
+	private JLabel titleLabel;
+	// 入力用パネル
+	private JPanel insertPanel;
+	// 人数入力用コンポーネント
+	private NumberInputPanel numberPanel;
+	// プレイヤー名入力用コンポーネント
+	private NameInputPanel namePanel;
+	// ボタン用パネル
+	private JPanel buttonPanel;
+	// ゲームへすすむボタンコンポーネント
+	private JButton gameButton;
+	// タイトルへもどるボタンコンポーネント
+	private JButton startButton;
+
+	// 文言
+	private static final String SETTINGPANEL = "設定画面";
+	private static final String GOGAME = "ゲームへすすむ";
+	private static final String GOSTART = "タイトルへもどる";
+
+	/*
+	 * コンストラクタ
+	 */
 	public SettingPanel(MainFrame mainFrame, String name) {
 		this.mainFrame = mainFrame;
 		this.setName(name);
 		this.setSize(mainFrame.getSize());
+
+		// レイアウト設定
 		borderLayout = new BorderLayout();
 		this.setLayout(borderLayout);
 
 		// タイトル作成
-		JLabel titleLabel = new JLabel("設定画面");
+		titleLabel = new JLabel(SETTINGPANEL);
 		titleLabel.setFont(new Font("ＭＳ ゴシック", Font.BOLD, 60));
 		titleLabel.setHorizontalAlignment(JLabel.CENTER);
 		this.add(titleLabel, BorderLayout.NORTH);
 
-		// 入力用パネル
-		JPanel insertPanel = new JPanel();
+		// 入力用パネル(下の二つを入れる)
+		insertPanel = new JPanel();
 		insertPanel.setLayout(new BoxLayout(insertPanel, BoxLayout.LINE_AXIS));
 
 		// 人数設定パネル作成
@@ -50,43 +74,39 @@ public class SettingPanel extends JPanel {
 		this.add(insertPanel, BorderLayout.CENTER);
 
 		// ボタン用のパネル
-		JPanel buttonPanel = new JPanel();
+		buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.PAGE_AXIS));
 
 		// ゲーム画面遷移ボタン作成
-		JButton gameButton = new JButton("ゲームへすすむ");
+		gameButton = new JButton(GOGAME);
 		gameButton.setPreferredSize(new Dimension(100, 50));
-		gameButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				showGamePanel();
-			}
-		});
+		gameButton.addActionListener(this);
 		buttonPanel.add(gameButton);
 
 		// スタート画面遷移ボタン作成
-		JButton startButton = new JButton("タイトルへもどる");
+		startButton = new JButton(GOSTART);
 		startButton.setPreferredSize(new Dimension(100, 50));
-		startButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				showStartPanel();
-			}
-		});
+		startButton.addActionListener(this);
 		buttonPanel.add(startButton);
 		this.add(buttonPanel, BorderLayout.SOUTH);
 	}
 
-	// ゲーム画面に遷移(今後変更予定)
-	public void showGamePanel() {
-		System.out.printf("プレイヤー名：%s\n", namePanel.getName());
-		System.out.printf("NPC人数：%d人\n", numberPanel.getNumber());
-		mainFrame.panelChange(this, MainFrame.GAMEPANEL);
-		mainFrame.setGame(namePanel.getName(), numberPanel.getNumber());
-	}
-
-	// スタート画面に遷移
-	public void showStartPanel() {
-		mainFrame.panelChange(this, MainFrame.STARTPANEL);
+	/*
+	 * ボタンを押したとき
+	 */
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		String actionCommand = e.getActionCommand();
+		switch (actionCommand) {
+		// ゲームへすすむボタン
+		case GOGAME:
+			mainFrame.panelChange(this, MainFrame.GAMEPANEL);
+			mainFrame.setGame(namePanel.getName(), numberPanel.getNumber());
+			break;
+		// タイトルへもどるボタン
+		case GOSTART:
+			mainFrame.panelChange(this, MainFrame.STARTPANEL);
+			break;
+		}
 	}
 }

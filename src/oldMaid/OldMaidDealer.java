@@ -5,7 +5,6 @@ import java.util.Collections;
 
 import cards.Cards;
 import gamer.Dealer;
-import panel.PlayPanel;
 
 public class OldMaidDealer extends Dealer {
 
@@ -19,27 +18,30 @@ public class OldMaidDealer extends Dealer {
 	// ゲーム中にカードを引かれる側
 	private OldMaidPlayer nextPlayer;
 
-	// ターン
-	private int turn;
+	// ターンプレイヤーの配列のインデックス
 	private int turnPlayerIndex;
 
-	// コンストラクタ
+	/*
+	 * コンストラクタ
+	 */
 	public OldMaidDealer() {
 		super();
 		players = new ArrayList<OldMaidPlayer>();
 		winPlayers = new ArrayList<OldMaidPlayer>();
-		turn = 0;
 		turnPlayerIndex = 0;
 	}
 
+	// プレイヤーの数のゲッター
 	public int getPlayersNumber() {
 		return players.size();
 	}
 
+	// ターンプレイヤーのゲッター
 	public OldMaidPlayer getTurnPlayer() {
 		return turnPlayer;
 	}
 
+	// 次のプレイヤーのゲッター
 	public OldMaidPlayer getNextPlayer() {
 		return nextPlayer;
 	}
@@ -54,20 +56,11 @@ public class OldMaidDealer extends Dealer {
 	}
 
 	/*
-	 * プレイヤーの決定
-	 */
-	public void decidePlayer(String name, PlayPanel playPanel) {
-		OldMaidPlayer player = new OldMaidPlayer(name, playPanel);
-		players.add(player);
-		System.out.println(name + "を追加しました");
-	}
-
-	/*
 	 * NPCの決定
 	 */
 	public void decideNPC(int number) {
 		for (int i = 1; i <= number; i++) {
-			String name = "NPC" + i;
+			String name = OldMaid.NPC + i;
 			OldMaidPlayer player = new OldMaidPlayer(name);
 			players.add(player);
 			System.out.println(name + "を追加しました");
@@ -120,57 +113,39 @@ public class OldMaidDealer extends Dealer {
 	}
 
 	/*
-	 * ゲーム開始 ターミナル上での入力前提
+	 * 最初のトランプ整理
 	 */
-	public void playGame() {
-		// 下準備
-		startGame();
-		// 一人になるまでゲームをやる
-		while (players.size() != 1) {
-			// ターンプレイヤーを決定
-			decideTurnPlayer();
-			// カードを取る
-			takeCard(-1);
-		}
-	}
-
-	/*
-	 * ゲーム開始
-	 */
-	public void startGame() {
-		// ターン0、まず全員のカードを整理する
-		System.out.printf("ターン%d\n", turn);
+	public void firstJudge() {
+		// まず全員のカードを整理する
 		for (int i = 0; i < players.size(); i++) {
 			judgeWin(players.get(i));
 		}
+		// 残り枚数の公開
 		showNumberCards();
-		turn++;
 	}
 
 	/*
 	 * ターンプレイヤーの決定
 	 */
 	public void decideTurnPlayer() {
-		System.out.printf("ターン%d\n", turn);
-
+		// ターンプレイヤーはインデックスからそのまま取得
 		turnPlayer = players.get(turnPlayerIndex);
 		System.out.printf("・%sの番\n", turnPlayer.getName());
-		// 次のプレイヤーのindexを取得(最後の人は最初の人からカードを取る)
+		// 次のプレイヤーのindexを取得(最後の人は最初の人からカードを取る)、ターン数を+1する
 		if (turnPlayerIndex >= players.size() - 1) {
 			nextPlayer = players.get(0);
-			turn++;
 		} else {
 			nextPlayer = players.get(turnPlayerIndex + 1);
 		}
 	}
 
 	/*
-	 * カードを取る 引数が-1の場合はNPC処理かターミナル上での直接入力になる それ以外は-1してカードを取得する
+	 * カードを取る 引数が-1の場合はNPC処理かターミナル上での直接入力になる それ以外は引数から-1してカードを取得する
 	 */
 	public void takeCard(int number) {
 		// 次のプレイヤーの手札から取るカードを選択
 		int handNumber = nextPlayer.getHand().size();
-		// 例外処理(out of bounds)考えていない
+		// numberの例外処理(out of bounds)考えていない→どこかしらで考える
 		int takeCardIndex = 0;
 		if (number == -1) {
 			takeCardIndex = turnPlayer.selectCard(handNumber);
@@ -228,7 +203,6 @@ public class OldMaidDealer extends Dealer {
 		players.clear();
 		winPlayers.clear();
 		hand.clear();
-		turn = 0;
 		turnPlayerIndex = 0;
 	}
 }

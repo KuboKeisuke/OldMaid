@@ -1,27 +1,13 @@
 package test;
 
-import oldMaid.OldMaidDealer;
+import oldMaid.OldMaid;
 
 /*
- * お試しクラス
+ * ターミナルでお試し
  * */
 public class DataTest {
 	public static void main(String[] args) {
-		// プレイヤー作成
-		OldMaidDealer dealer = new OldMaidDealer();
-
-		dealer.decidePlayer("プレイヤー1");
-		dealer.decideNPC(3);
-		System.out.println();
-		dealer.playerShuffle();
-
-		// プレイヤーにカードを配る
-		dealer.getHand().makeDeck();
-		dealer.cardShuffle();
-		dealer.dealCards();
-
-		// ゲームスタート
-		dealer.playGame();
-
+		OldMaid oldMaid = new OldMaid();
+		oldMaid.playOldMaid("プレイヤー1", 3);
 	}
 }
