@@ -3,7 +3,7 @@ package test;
 import oldMaid.OldMaid;
 
 /*
- * ターミナルでお試し
+ * コンソールでお試し用テストクラス
  * */
 public class DataTest {
 	public static void main(String[] args) {

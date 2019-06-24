@@ -63,8 +63,9 @@ public class NumberInputPanel extends JPanel implements ActionListener {
 
 	// 人数のゲッター
 	public int getNumber() {
-		// Integer.getInteger(numberLabel.getText());
-		return 3;
+		int number = 0;
+		number = Integer.valueOf(numberLabel.getText());
+		return number;
 	}
 
 	/*

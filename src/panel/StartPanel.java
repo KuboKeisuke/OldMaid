@@ -31,6 +31,7 @@ public class StartPanel extends JPanel implements ActionListener {
 	private JButton settingButton;
 
 	// 文言
+	private static final String OLDMAID = "ババ抜き";
 	private static final String GOSETTING = "はじめる";
 	public static final String OLDMAIDSTARTIMGPATH = "./image/OldMaid_Main.png";
 
@@ -48,7 +49,7 @@ public class StartPanel extends JPanel implements ActionListener {
 		this.setLayout(borderLayout);
 
 		// タイトル作成
-		titleLabel = new JLabel("ババ抜き");
+		titleLabel = new JLabel(OLDMAID);
 		titleLabel.setFont(new Font("ＭＳ ゴシック", Font.BOLD, 60));
 		titleLabel.setPreferredSize(new Dimension(100, 50));
 		titleLabel.setHorizontalAlignment(JLabel.CENTER);

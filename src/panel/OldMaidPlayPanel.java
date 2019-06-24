@@ -1,40 +1,35 @@
 package panel;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import oldMaid.OldMaid;
+import oldMaid.OldMaidPlayer;
 
 /*
  * ゲーム情報を伝えるパネル
  * */
-public class OldMaidPlayPanel extends JPanel implements ActionListener {
+public class OldMaidPlayPanel extends JPanel {
 	// レイアウト
 	private BorderLayout borderLayout;
 
-	// プレイヤー名表示用コンポーネント
-	private JLabel playerLabel;
 	// ターン数表示用コンポーネント
 	private JLabel turnLabel;
+	// 選択用手札表示用パネル
+	private HandImagePanel nextPlayerHandImagePanel;
+	// プレイヤー手札表示用パネル
+	private HandImagePanel turnPlayerHandImagePanel;
 	// カードを引くための入力用コンポーネント(仮置き)
 	private JTextField numberLabel;
-	// カード選択完了ボタンコンポーネント(仮置き)
-	private JButton selectButton;
 	// ババ抜きクラス
 	private OldMaid oldMaid;
 
 	// 文言
 	private static final String TURN = "ターン";
-	private static final String SELECT = "選択";
 
 	/*
 	 * コンストラクタ
@@ -47,31 +42,19 @@ public class OldMaidPlayPanel extends JPanel implements ActionListener {
 		// ババ抜き
 		oldMaid = new OldMaid();
 
-		// プレイヤー
-		playerLabel = new JLabel();
-		playerLabel.setFont(new Font("ＭＳ ゴシック", Font.BOLD, 60));
-		playerLabel.setHorizontalAlignment(JLabel.CENTER);
-		this.add(playerLabel, BorderLayout.NORTH);
-
 		// ターン数
 		turnLabel = new JLabel(TURN);
 		turnLabel.setFont(new Font("ＭＳ ゴシック", Font.BOLD, 60));
 		turnLabel.setHorizontalAlignment(JLabel.CENTER);
-		this.add(turnLabel, BorderLayout.CENTER);
+		this.add(turnLabel, BorderLayout.NORTH);
 
-		// 入力(仮置き)
-		numberLabel = new JTextField("1");
-		JPanel textPanel = new JPanel();
-		numberLabel.setPreferredSize(new Dimension(200, 40));
-		numberLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		textPanel.add(numberLabel);
-		this.add(textPanel, BorderLayout.SOUTH);
+		// 相手の手札
+		nextPlayerHandImagePanel = new HandImagePanel(this);
+		this.add(nextPlayerHandImagePanel, BorderLayout.CENTER);
 
-		// カード選択ボタン作成
-		selectButton = new JButton(SELECT);
-		selectButton.setPreferredSize(new Dimension(100, 50));
-		selectButton.addActionListener(this);
-		this.add(selectButton, BorderLayout.EAST);
+		// 自分の手札
+		turnPlayerHandImagePanel = new HandImagePanel(this);
+		this.add(turnPlayerHandImagePanel, BorderLayout.SOUTH);
 	}
 
 	// トランプを引くときのインデックスラベルを数値に変換(仮置き)
@@ -83,8 +66,9 @@ public class OldMaidPlayPanel extends JPanel implements ActionListener {
 	 * ゲームの前準備
 	 */
 	public void setGame(String name, int number) {
-		playerLabel.setText(name);
 		oldMaid.setGame(name, number);
+		nextPlayerHandImagePanel.drawCards(oldMaid.getOldMaidDealer().getNextPlayer(), false);
+		turnPlayerHandImagePanel.drawCards(oldMaid.getOldMaidDealer().getTurnPlayer(), true);
 		turnLabel.setText(TURN + oldMaid.getTurn());
 	}
 
@@ -92,20 +76,23 @@ public class OldMaidPlayPanel extends JPanel implements ActionListener {
 	 * ゲーム終了処理
 	 */
 	public void endGame() {
+		System.out.println("ゲーム終了");
 		oldMaid.endGame();
 	}
 
 	/*
-	 * ボタンを押したとき
+	 * カードのパネルを押したとき
 	 */
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		String actionCommand = e.getActionCommand();
-		switch (actionCommand) {
-		// カード選択ボタン
-		case SELECT:
-			oldMaid.playOldMaid(getText());
-			turnLabel.setText(TURN + oldMaid.getTurn());
+	public void selectCard(int number) {
+		oldMaid.playOldMaid(number);
+		turnLabel.setText(TURN + oldMaid.getTurn());
+		// 一人になったときの仮処理(空のプレイヤーを入れてカードが表示されないようにする)
+		if (oldMaid.getOldMaidDealer().getNextPlayer().equals(oldMaid.getOldMaidDealer().getTurnPlayer())) {
+			nextPlayerHandImagePanel.drawCards(new OldMaidPlayer(""), false);
+			turnPlayerHandImagePanel.drawCards(new OldMaidPlayer(""), true);
+		} else {
+			nextPlayerHandImagePanel.drawCards(oldMaid.getOldMaidDealer().getNextPlayer(), false);
+			turnPlayerHandImagePanel.drawCards(oldMaid.getOldMaidDealer().getTurnPlayer(), true);
 		}
 	}
 }

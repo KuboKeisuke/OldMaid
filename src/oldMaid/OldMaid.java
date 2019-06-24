@@ -44,6 +44,7 @@ public class OldMaid {
 	 * ゲーム開始(Swing用) プレイヤーの番を先にやったあと再びプレイヤーの番にするためNPCの番を行う(下準備と最初の整理は別途行う必要がある)
 	 */
 	public void playOldMaid(int takeCardIndex) {
+		System.out.printf("ターン%d\n", turn);
 		// プレイヤーの番
 		if (!oldMaidDealer.getTurnPlayer().getName().contains(NPC) && oldMaidDealer.getPlayersNumber() != 1) {
 			oldMaidDealer.takeCard(takeCardIndex);
@@ -55,7 +56,6 @@ public class OldMaid {
 			oldMaidDealer.decideTurnPlayer();
 		}
 		turn++;
-		System.out.printf("ターン%d\n", turn);
 	}
 
 	/*
@@ -95,5 +95,12 @@ public class OldMaid {
 	 */
 	public int getTurn() {
 		return turn;
+	}
+
+	/*
+	 * ディーラーのゲッター
+	 */
+	public OldMaidDealer getOldMaidDealer() {
+		return oldMaidDealer;
 	}
 }

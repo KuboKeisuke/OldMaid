@@ -46,6 +46,10 @@ public class OldMaidDealer extends Dealer {
 		return nextPlayer;
 	}
 
+	public ArrayList<OldMaidPlayer> winPlayers() {
+		return winPlayers;
+	}
+
 	/*
 	 * プレイヤーの決定
 	 */
@@ -143,14 +147,13 @@ public class OldMaidDealer extends Dealer {
 	 * カードを取る 引数が-1の場合はNPC処理かターミナル上での直接入力になる それ以外は引数から-1してカードを取得する
 	 */
 	public void takeCard(int number) {
-		// 次のプレイヤーの手札から取るカードを選択
+		// 次のプレイヤーの手札の枚数を取得
 		int handNumber = nextPlayer.getHand().size();
-		// numberの例外処理(out of bounds)考えていない→どこかしらで考える
 		int takeCardIndex = 0;
 		if (number == -1) {
 			takeCardIndex = turnPlayer.selectCard(handNumber);
 		} else {
-			takeCardIndex = number - 1;
+			takeCardIndex = number;
 		}
 		// 次のプレイヤーからカードを取得
 		Cards card = nextPlayer.giveCard(takeCardIndex);
