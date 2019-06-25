@@ -7,17 +7,14 @@ import cards.Cards;
 import gamer.Dealer;
 
 public class OldMaidDealer extends Dealer {
-
 	// プレイヤーたち
 	private ArrayList<OldMaidPlayer> players;
 	// 勝者プレイヤーたち
 	private ArrayList<OldMaidPlayer> winPlayers;
-
 	// ゲーム中にカードを引く側
 	private OldMaidPlayer turnPlayer;
 	// ゲーム中にカードを引かれる側
 	private OldMaidPlayer nextPlayer;
-
 	// ターンプレイヤーの配列のインデックス
 	private int turnPlayerIndex;
 
@@ -46,7 +43,8 @@ public class OldMaidDealer extends Dealer {
 		return nextPlayer;
 	}
 
-	public ArrayList<OldMaidPlayer> winPlayers() {
+	// 勝者のゲッター
+	public ArrayList<OldMaidPlayer> getWinPlayers() {
 		return winPlayers;
 	}
 
@@ -75,6 +73,7 @@ public class OldMaidDealer extends Dealer {
 	 * カードを配る(ババ抜きで使用) ディーラーの持っているカードすべてを各プレイヤーに一枚ずつ渡す
 	 */
 	public void dealCards() {
+		// すべてのカードがなくなるまで
 		while (hand.size() != 0) {
 			for (int i = 0; i < players.size(); i++) {
 				if (hand.size() != 0) {
@@ -134,24 +133,23 @@ public class OldMaidDealer extends Dealer {
 	public void decideTurnPlayer() {
 		// ターンプレイヤーはインデックスからそのまま取得
 		turnPlayer = players.get(turnPlayerIndex);
-		System.out.printf("・%sの番\n", turnPlayer.getName());
 		// 次のプレイヤーのindexを取得(最後の人は最初の人からカードを取る)、ターン数を+1する
 		if (turnPlayerIndex >= players.size() - 1) {
 			nextPlayer = players.get(0);
 		} else {
 			nextPlayer = players.get(turnPlayerIndex + 1);
 		}
+		System.out.printf("次は%sの番\n", turnPlayer.getName());
 	}
 
 	/*
 	 * カードを取る 引数が-1の場合はNPC処理かターミナル上での直接入力になる それ以外は引数から-1してカードを取得する
 	 */
 	public void takeCard(int number) {
-		// 次のプレイヤーの手札の枚数を取得
-		int handNumber = nextPlayer.getHand().size();
 		int takeCardIndex = 0;
 		if (number == -1) {
-			takeCardIndex = turnPlayer.selectCard(handNumber);
+			// 次のプレイヤーの手札の枚数から次取るカードのインデックスを取得
+			takeCardIndex = turnPlayer.selectCard(nextPlayer.getHand().size());
 		} else {
 			takeCardIndex = number;
 		}
@@ -163,16 +161,18 @@ public class OldMaidDealer extends Dealer {
 		judgeWin(nextPlayer);
 		// カードを取った後のターンプレイヤーのジャッジ
 		judgeWin(turnPlayer);
-		// 残り手札枚数の公開
-		showNumberCards();
-		if (turnPlayerIndex >= players.size() - 1) {
-			turnPlayerIndex = 0;
+		// ゲーム続行の場合
+		if (!judgeEndGame()) {
+			// 残り手札枚数の公開
+			showNumberCards();
+			if (turnPlayerIndex >= players.size() - 1) {
+				turnPlayerIndex = 0;
+			} else {
+				turnPlayerIndex++;
+			}
+			decideTurnPlayer();
 		} else {
-			turnPlayerIndex++;
-		}
-		// プレイヤーが一人なら終了
-		if (players.size() == 1) {
-			showWinner();
+			endGame();
 		}
 	}
 
@@ -184,28 +184,31 @@ public class OldMaidDealer extends Dealer {
 			System.out.printf("%sが抜けました。\n", player.getName());
 			winPlayers.add(player);
 			// 勝利するプレイヤーのindexを探して除外する
-			int index = players.indexOf(player);
-			players.remove(index);
+			players.remove(players.indexOf(player));
 		}
 	}
 
 	/*
-	 * 勝者を順番に表示する
+	 * ゲームが終わったかどうか判断する
 	 */
-	public void showWinner() {
-		for (int i = 0; i < winPlayers.size(); i++) {
-			System.out.printf("%d位：%s\n", i + 1, winPlayers.get(i).getName());
+	public boolean judgeEndGame() {
+		boolean endGame = false;
+		if (players.size() == 1 || players.size() == 0) {
+			endGame = true;
 		}
-		System.out.printf("敗者：%s\n", players.get(0).getName());
+		return endGame;
 	}
 
 	/*
 	 * ゲームを終了させる すべての値の初期化
 	 */
 	public void endGame() {
-		players.clear();
-		winPlayers.clear();
-		hand.clear();
-		turnPlayerIndex = 0;
+		// 一人残っているものも勝者配列に保存
+		winPlayers.add(players.get(0));
+		players.remove(0);
+		System.out.println("ゲーム終了");
+		for (int i = 0; i < winPlayers.size(); i++) {
+			System.out.printf("%d位：%s\n", i + 1, winPlayers.get(i).getName());
+		}
 	}
 }

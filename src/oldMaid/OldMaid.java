@@ -6,7 +6,6 @@ package oldMaid;
 public class OldMaid {
 	// ババ抜きのディーラー
 	private OldMaidDealer oldMaidDealer;
-
 	// ターン
 	private int turn;
 
@@ -30,32 +29,32 @@ public class OldMaid {
 		// 最初のトランプ整理
 		oldMaidDealer.firstJudge();
 		// 一人になるまでゲームをやる
-		while (oldMaidDealer.getPlayersNumber() != 1) {
+		while (!oldMaidDealer.judgeEndGame()) {
 			System.out.printf("ターン%d\n", turn);
-			// ターンプレイヤーを決定
-			oldMaidDealer.decideTurnPlayer();
+			if (!oldMaidDealer.getTurnPlayer().getName().contains(NPC)) {
+				turn++;
+			}
 			// カードを取る
 			oldMaidDealer.takeCard(-1);
-			turn++;
 		}
 	}
 
 	/*
-	 * ゲーム開始(Swing用) プレイヤーの番を先にやったあと再びプレイヤーの番にするためNPCの番を行う(下準備と最初の整理は別途行う必要がある)
+	 * ゲーム開始(Swing用) プレイヤーの番を先にやったあと再びプレイヤーの番になるまでNPCの番を行う(下準備と最初の整理は別途行う必要がある)
 	 */
 	public void playOldMaid(int takeCardIndex) {
 		System.out.printf("ターン%d\n", turn);
 		// プレイヤーの番
-		if (!oldMaidDealer.getTurnPlayer().getName().contains(NPC) && oldMaidDealer.getPlayersNumber() != 1) {
+		if (!oldMaidDealer.getTurnPlayer().getName().contains(NPC) && oldMaidDealer.getPlayersNumber() != 0) {
 			oldMaidDealer.takeCard(takeCardIndex);
-			oldMaidDealer.decideTurnPlayer();
 		}
 		// 再びプレイヤーの番になるまでNPCの番を行う
-		while (oldMaidDealer.getTurnPlayer().getName().contains(NPC) && oldMaidDealer.getPlayersNumber() != 1) {
+		while (oldMaidDealer.getTurnPlayer().getName().contains(NPC) && oldMaidDealer.getPlayersNumber() != 0) {
 			oldMaidDealer.takeCard(-1);
-			oldMaidDealer.decideTurnPlayer();
 		}
-		turn++;
+		if (oldMaidDealer.getPlayersNumber() != 0) {
+			turn++;
+		}
 	}
 
 	/*
@@ -79,15 +78,13 @@ public class OldMaid {
 		// ターンプレイヤーの決定
 		oldMaidDealer.decideTurnPlayer();
 		turn++;
-		System.out.printf("ターン%d\n", turn);
 	}
 
 	/*
 	 * ゲームを終了させる すべての値の初期化
 	 */
 	public void endGame() {
-		oldMaidDealer = new OldMaidDealer();
-		turn = 0;
+		oldMaidDealer.endGame();
 	}
 
 	/*

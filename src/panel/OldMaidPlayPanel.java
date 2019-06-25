@@ -5,15 +5,18 @@ import java.awt.Font;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
+import frame.MainFrame;
 import oldMaid.OldMaid;
-import oldMaid.OldMaidPlayer;
 
 /*
  * ゲーム情報を伝えるパネル
  * */
 public class OldMaidPlayPanel extends JPanel {
+	// メインフレーム
+	private MainFrame mainFrame;
+	// ゲームパネル
+	private GamePanel gamePanel;
 	// レイアウト
 	private BorderLayout borderLayout;
 
@@ -23,8 +26,6 @@ public class OldMaidPlayPanel extends JPanel {
 	private HandImagePanel nextPlayerHandImagePanel;
 	// プレイヤー手札表示用パネル
 	private HandImagePanel turnPlayerHandImagePanel;
-	// カードを引くための入力用コンポーネント(仮置き)
-	private JTextField numberLabel;
 	// ババ抜きクラス
 	private OldMaid oldMaid;
 
@@ -34,7 +35,9 @@ public class OldMaidPlayPanel extends JPanel {
 	/*
 	 * コンストラクタ
 	 */
-	public OldMaidPlayPanel() {
+	public OldMaidPlayPanel(MainFrame mainFrame, GamePanel gamePanel) {
+		this.mainFrame = mainFrame;
+		this.gamePanel = gamePanel;
 		// レイアウト設定
 		borderLayout = new BorderLayout();
 		this.setLayout(borderLayout);
@@ -57,27 +60,29 @@ public class OldMaidPlayPanel extends JPanel {
 		this.add(turnPlayerHandImagePanel, BorderLayout.SOUTH);
 	}
 
-	// トランプを引くときのインデックスラベルを数値に変換(仮置き)
-	public int getText() {
-		return Integer.parseInt(numberLabel.getText());
-	}
-
 	/*
 	 * ゲームの前準備
 	 */
 	public void setGame(String name, int number) {
 		oldMaid.setGame(name, number);
-		nextPlayerHandImagePanel.drawCards(oldMaid.getOldMaidDealer().getNextPlayer(), false);
-		turnPlayerHandImagePanel.drawCards(oldMaid.getOldMaidDealer().getTurnPlayer(), true);
-		turnLabel.setText(TURN + oldMaid.getTurn());
+		drawHands();
 	}
 
 	/*
-	 * ゲーム終了処理
+	 * ゲーム終了処理と結果画面への遷移
 	 */
 	public void endGame() {
-		System.out.println("ゲーム終了");
-		oldMaid.endGame();
+		mainFrame.setWinPlayers(oldMaid.getOldMaidDealer().getWinPlayers());
+		mainFrame.panelChange(gamePanel, MainFrame.RESULTPANEL);
+		initializeOldMaid();
+	}
+
+	/*
+	 * ババ抜きの初期化
+	 */
+	public void initializeOldMaid() {
+		System.out.println("ババ抜き初期化");
+		oldMaid = new OldMaid();
 	}
 
 	/*
@@ -85,14 +90,19 @@ public class OldMaidPlayPanel extends JPanel {
 	 */
 	public void selectCard(int number) {
 		oldMaid.playOldMaid(number);
-		turnLabel.setText(TURN + oldMaid.getTurn());
-		// 一人になったときの仮処理(空のプレイヤーを入れてカードが表示されないようにする)
-		if (oldMaid.getOldMaidDealer().getNextPlayer().equals(oldMaid.getOldMaidDealer().getTurnPlayer())) {
-			nextPlayerHandImagePanel.drawCards(new OldMaidPlayer(""), false);
-			turnPlayerHandImagePanel.drawCards(new OldMaidPlayer(""), true);
+		if (oldMaid.getOldMaidDealer().judgeEndGame()) {
+			endGame();
 		} else {
-			nextPlayerHandImagePanel.drawCards(oldMaid.getOldMaidDealer().getNextPlayer(), false);
-			turnPlayerHandImagePanel.drawCards(oldMaid.getOldMaidDealer().getTurnPlayer(), true);
+			drawHands();
 		}
+	}
+
+	/*
+	 * 手札の描画(なぜかターン数のラベルをセットしないとうまく描画してくれない)
+	 */
+	public void drawHands() {
+		turnLabel.setText(TURN + oldMaid.getTurn());
+		nextPlayerHandImagePanel.drawCards(oldMaid.getOldMaidDealer().getNextPlayer(), false);
+		turnPlayerHandImagePanel.drawCards(oldMaid.getOldMaidDealer().getTurnPlayer(), true);
 	}
 }

@@ -1,26 +1,28 @@
 package panel;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JTextPane;
 
 import frame.MainFrame;
+import oldMaid.OldMaidPlayer;
 
-/*
- * ゲーム画面
- * */
-public class GamePanel extends JPanel implements ActionListener {
+public class ResultPanel extends JPanel implements ActionListener {
 	// メインフレーム
 	private MainFrame mainFrame;
 	// レイアウト
 	private BorderLayout borderLayout;
 
-	// プレイパネルコンポーネント
-	private OldMaidPlayPanel playPanel;
+	// タイトル表示用コンポーネント
+	private JTextPane titleLabel;
 	// タイトルに戻るボタンコンポーネント
 	private JButton startButton;
 
@@ -30,19 +32,18 @@ public class GamePanel extends JPanel implements ActionListener {
 	/*
 	 * コンストラクタ
 	 */
-	public GamePanel(MainFrame mainFrame, String name) {
+	public ResultPanel(MainFrame mainFrame, String name) {
 		this.mainFrame = mainFrame;
 		this.setName(name);
-		// メインフレームのサイズだと2回目以降がおかしくなる(仮置き)
-		this.setSize(new Dimension(950, 550));
-
 		// レイアウト設定
 		borderLayout = new BorderLayout();
 		this.setLayout(borderLayout);
 
-		// プレイ画面パネル
-		playPanel = new OldMaidPlayPanel(mainFrame, this);
-		this.add(playPanel, BorderLayout.CENTER);
+		// タイトル作成
+		titleLabel = new JTextPane();
+		titleLabel.setFont(new Font("ＭＳ ゴシック", Font.BOLD, 40));
+		titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		this.add(titleLabel, BorderLayout.CENTER);
 
 		// スタート画面遷移ボタン作成
 		startButton = new JButton(GOSTART);
@@ -51,12 +52,12 @@ public class GamePanel extends JPanel implements ActionListener {
 		this.add(startButton, BorderLayout.SOUTH);
 	}
 
-	/*
-	 * プレイヤーの決定とゲームの準備
-	 */
-	public void setGame(String name, int number) {
-		// ゲームの準備
-		playPanel.setGame(name, number);
+	public void setWinPlayers(ArrayList<OldMaidPlayer> winPlayers) {
+		String a = "";
+		for (int i = 0; i < winPlayers.size(); i++) {
+			a += i + 1 + "位：" + winPlayers.get(i).getName() + "\n";
+		}
+		titleLabel.setText(a);
 	}
 
 	/*
@@ -66,11 +67,8 @@ public class GamePanel extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		String actionCommand = e.getActionCommand();
 		switch (actionCommand) {
-		// スタート画面に戻るボタン
+		// タイトルへもどるボタン
 		case GOSTART:
-			// ゲーム終了
-			System.out.println("途中終了");
-			playPanel.initializeOldMaid();
 			mainFrame.panelChange(this, MainFrame.STARTPANEL);
 			break;
 		}

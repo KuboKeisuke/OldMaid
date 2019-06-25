@@ -42,7 +42,7 @@ public class StartPanel extends JPanel implements ActionListener {
 		this.mainFrame = mainFrame;
 		this.setName(name);
 		// メインフレームのサイズだとおかしくなる(仮置き)
-		this.setSize(new Dimension(900, 500));
+		this.setSize(new Dimension(950, 550));
 
 		// レイアウト設定
 		borderLayout = new BorderLayout();
