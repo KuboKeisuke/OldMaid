@@ -33,8 +33,6 @@ public class GamePanel extends JPanel implements ActionListener {
 	public GamePanel(MainFrame mainFrame, String name) {
 		this.mainFrame = mainFrame;
 		this.setName(name);
-		// メインフレームのサイズだと2回目以降がおかしくなる(仮置き)
-		this.setSize(new Dimension(950, 550));
 
 		// レイアウト設定
 		borderLayout = new BorderLayout();

@@ -105,4 +105,8 @@ public class OldMaidPlayPanel extends JPanel {
 		nextPlayerHandImagePanel.drawCards(oldMaid.getOldMaidDealer().getNextPlayer(), false);
 		turnPlayerHandImagePanel.drawCards(oldMaid.getOldMaidDealer().getTurnPlayer(), true);
 	}
+
+	public OldMaid getOldMaid() {
+		return oldMaid;
+	}
 }

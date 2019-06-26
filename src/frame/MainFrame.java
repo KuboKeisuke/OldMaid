@@ -1,5 +1,7 @@
 package frame;
 
+import java.awt.CardLayout;
+import java.awt.Dimension;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -23,6 +25,8 @@ public class MainFrame extends JFrame {
 	public static final String GAMEPANEL = "GAMEPANEL";
 	// 結果画面名
 	public static final String RESULTPANEL = "RESULTPANEL";
+	// レイアウト
+	private CardLayout cardLayout;
 
 	// スタート画面
 	private StartPanel startPanel;
@@ -39,8 +43,13 @@ public class MainFrame extends JFrame {
 	public MainFrame() {
 		// 表示位置とサイズ
 		this.setBounds(150, 80, 1000, 600);
+		this.setPreferredSize(new Dimension(1000, 600));
 		// サイズ変更不可
 		this.setResizable(true);
+
+		// レイアウト設定
+		cardLayout = new CardLayout();
+		this.setLayout(cardLayout);
 
 		startPanel = new StartPanel(this, STARTPANEL);
 		settingPanel = new SettingPanel(this, SETTINGPANEL);
@@ -58,6 +67,7 @@ public class MainFrame extends JFrame {
 		settingPanel.setVisible(false);
 		gamePanel.setVisible(false);
 		resultPanel.setVisible(false);
+
 		this.setVisible(true);
 	}
 
@@ -81,7 +91,7 @@ public class MainFrame extends JFrame {
 			nowPanel.setVisible(false);
 			gamePanel.setVisible(true);
 			break;
-		// ゲーム画面に遷移
+		// 結果画面に遷移
 		case RESULTPANEL:
 			nowPanel.setVisible(false);
 			resultPanel.setVisible(true);

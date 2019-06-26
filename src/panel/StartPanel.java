@@ -1,7 +1,6 @@
 package panel;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -41,8 +40,6 @@ public class StartPanel extends JPanel implements ActionListener {
 	public StartPanel(MainFrame mainFrame, String name) {
 		this.mainFrame = mainFrame;
 		this.setName(name);
-		// メインフレームのサイズだとおかしくなる(仮置き)
-		this.setSize(new Dimension(950, 550));
 
 		// レイアウト設定
 		borderLayout = new BorderLayout();
@@ -51,7 +48,6 @@ public class StartPanel extends JPanel implements ActionListener {
 		// タイトル作成
 		titleLabel = new JLabel(OLDMAID);
 		titleLabel.setFont(new Font("ＭＳ ゴシック", Font.BOLD, 60));
-		titleLabel.setPreferredSize(new Dimension(100, 50));
 		titleLabel.setHorizontalAlignment(JLabel.CENTER);
 		this.add(titleLabel, BorderLayout.NORTH);
 

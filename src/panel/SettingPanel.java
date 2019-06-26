@@ -48,7 +48,6 @@ public class SettingPanel extends JPanel implements ActionListener {
 	public SettingPanel(MainFrame mainFrame, String name) {
 		this.mainFrame = mainFrame;
 		this.setName(name);
-		this.setSize(mainFrame.getSize());
 
 		// レイアウト設定
 		borderLayout = new BorderLayout();
