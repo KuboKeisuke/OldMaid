@@ -1,7 +1,7 @@
 package panel;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -78,14 +78,16 @@ public class SettingPanel extends JPanel implements ActionListener {
 
 		// ゲーム画面遷移ボタン作成
 		gameButton = new JButton(GOGAME);
-		gameButton.setPreferredSize(new Dimension(100, 50));
+		gameButton.setFont(new Font("ＭＳ ゴシック", Font.BOLD, 20));
 		gameButton.addActionListener(this);
+		gameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		buttonPanel.add(gameButton);
 
 		// スタート画面遷移ボタン作成
 		startButton = new JButton(GOSTART);
-		startButton.setPreferredSize(new Dimension(100, 50));
+		startButton.setFont(new Font("ＭＳ ゴシック", Font.BOLD, 20));
 		startButton.addActionListener(this);
+		startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		buttonPanel.add(startButton);
 		this.add(buttonPanel, BorderLayout.SOUTH);
 	}

@@ -35,15 +35,16 @@ public class NameInputPanel extends JPanel implements ActionListener {
 	 * コンストラクタ
 	 */
 	public NameInputPanel() {
+		JPanel jpanel = new JPanel();
 		// レイアウト設定 上から下に順にラベルを配置
-		boxLayout = new BoxLayout(this, boxLayout.PAGE_AXIS);
-		this.setLayout(boxLayout);
+		boxLayout = new BoxLayout(jpanel, boxLayout.PAGE_AXIS);
+		jpanel.setLayout(boxLayout);
 
 		// タイトル作成
 		titleLabel = new JLabel(TITLELABEL);
 		titleLabel.setFont(new Font("ＭＳ ゴシック", Font.BOLD, 40));
 		titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		this.add(titleLabel);
+		jpanel.add(titleLabel);
 
 		// プレイヤー名入力
 		playerNameLabel = new JTextField(PLAYER1);
@@ -51,14 +52,15 @@ public class NameInputPanel extends JPanel implements ActionListener {
 		playerNameLabel.setPreferredSize(new Dimension(200, 40));
 		playerNameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		textPanel.add(playerNameLabel);
-		this.add(textPanel);
+		jpanel.add(textPanel);
 
 		// プレイヤー名自動設定
 		setNameButton = new JButton(SETNAMEBUTTON);
 		setNameButton.setPreferredSize(new Dimension(100, 50));
 		setNameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		setNameButton.addActionListener(this);
-		this.add(setNameButton);
+		jpanel.add(setNameButton);
+		this.add(jpanel);
 	}
 
 	/*

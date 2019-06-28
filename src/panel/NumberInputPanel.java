@@ -35,15 +35,16 @@ public class NumberInputPanel extends JPanel implements ActionListener {
 	 * コンストラクタ
 	 */
 	public NumberInputPanel() {
+		JPanel jpanel = new JPanel();
 		// レイアウト設定 上から下に順にラベルを配置
-		boxLayout = new BoxLayout(this, boxLayout.PAGE_AXIS);
-		this.setLayout(boxLayout);
+		boxLayout = new BoxLayout(jpanel, boxLayout.PAGE_AXIS);
+		jpanel.setLayout(boxLayout);
 
 		// タイトル作成
 		titleLabel = new JLabel(TITLELABEL);
 		titleLabel.setFont(new Font("ＭＳ ゴシック", Font.BOLD, 40));
 		titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		this.add(titleLabel);
+		jpanel.add(titleLabel);
 
 		// 人数入力
 		numberLabel = new JTextField(String.valueOf(THREE));
@@ -51,14 +52,15 @@ public class NumberInputPanel extends JPanel implements ActionListener {
 		numberLabel.setPreferredSize(new Dimension(200, 40));
 		numberLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		textPanel.add(numberLabel);
-		this.add(textPanel);
+		jpanel.add(textPanel);
 
 		// CPU自動設定
 		setNumberButton = new JButton(SETNUMBERBUTTON);
 		setNumberButton.setPreferredSize(new Dimension(100, 50));
 		setNumberButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		setNumberButton.addActionListener(this);
-		this.add(setNumberButton);
+		jpanel.add(setNumberButton);
+		this.add(jpanel);
 	}
 
 	// 人数のゲッター
